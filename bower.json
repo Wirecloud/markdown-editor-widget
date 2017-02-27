@@ -1,0 +1,17 @@
+{
+  "name": "markdown-editor",
+  "dependencies": {
+  	"simplemde": "1.10.0",
+  	"marked": "0.3.6"
+  },
+  "devDependencies": {},
+  "exportsOverride": {
+	  "marked": {
+      "js": "marked.min.js"
+    },
+    "simplemde": {
+      "css": "dist/simplemde.min.css",
+      "js": "dist/simplemde.min.js"
+    }
+  }
+}
