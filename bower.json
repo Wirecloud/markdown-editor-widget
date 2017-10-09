@@ -2,7 +2,8 @@
   "name": "markdown-editor",
   "dependencies": {
   	"simplemde": "1.10.0",
-  	"marked": "0.3.6"
+  	"marked": "0.3.6",
+    "highlightjs": "8.4"
   },
   "devDependencies": {},
   "exportsOverride": {
@@ -12,6 +13,10 @@
     "simplemde": {
       "css": "dist/simplemde.min.css",
       "js": "dist/simplemde.min.js"
+    },
+    "highlightjs": {
+      "css": "styles/default.css",
+      "js": "highlight.pack.js"
     }
   }
 }
