@@ -6,7 +6,7 @@
  * Licensed under the Apache-2.0 license.
  */
 
-/* globals SimpleMDE marked*/
+/* globals SimpleMDE marked hljs*/
 /* exported MarkdownEditor */
 
 var MarkdownEditor = (function () {
@@ -16,6 +16,7 @@ var MarkdownEditor = (function () {
     // =========================================================================
     // CLASS DEFINITION
     // =========================================================================
+    var toolbarButton;
 
     var MarkdownEditor = function MarkdownEditor() {
         // Allow links to be clicked
@@ -37,7 +38,15 @@ var MarkdownEditor = (function () {
         };
         marked.setOptions({
             xhtml: true,
-            renderer: markdown_renderer
+            renderer: markdown_renderer,
+            highlight: function (code, lang) {
+                // Avoid exception if language is wrong / being typed and do nothing
+                if (hljs.listLanguages().indexOf(lang) !== -1) {
+                    return hljs.highlight(lang.toLowerCase(), code).value;
+                } else {
+                    return code;
+                }
+            }
         });
 
         SimpleMDE.toggleFullScreen = toggleFullScreen;
@@ -90,6 +99,11 @@ var MarkdownEditor = (function () {
         MashupPlatform.wiring.registerCallback("input", function (input) {
             simplemde.value(input);
         });
+
+        document.addEventListener('webkitfullscreenchange', onFullScreenExit, false);
+        document.addEventListener('mozfullscreenchange', onFullScreenExit, false);
+        document.addEventListener('fullscreenchange', onFullScreenExit, false);
+        document.addEventListener('MSFullscreenChange', onFullScreenExit, false);
     };
 
     var toggleSideBySide = function toggleSideBySide(editor) {
@@ -154,7 +168,7 @@ var MarkdownEditor = (function () {
         // cm.setOption("fullScreen", !cm.getOption("fullScreen"));
 
         // Update toolbar button
-        var toolbarButton = editor.toolbarElements.fullscreen;
+        toolbarButton = editor.toolbarElements.fullscreen;
 
         if (!/active/.test(toolbarButton.className)) {
             toolbarButton.className += " active";
@@ -185,6 +199,10 @@ var MarkdownEditor = (function () {
             }
         }
     };
+
+    var onFullScreenExit = function onFullScreenExit() {
+        toolbarButton.className = toolbarButton.className.replace(/\s*active\s*/g, "");
+    }
 
     // =========================================================================
     // PRIVATE MEMBERS
